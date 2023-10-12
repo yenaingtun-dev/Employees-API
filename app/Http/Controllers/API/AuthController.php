@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -19,50 +17,47 @@ class AuthController extends Controller
             'password' => 'required|min:8',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-        $token = $user->createToken('api_token')->accessToken;
+        $user = new User;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->save();
 
         return response()->json([
-            'message' => 'You Are Successfully Register!',
+            'message' => 'Successfully created user!',
             'user' => $user,
-            'access_token' => $token,
         ], 201);
     }
 
     public function login(Request $request)
     {
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password,
-        ];
-
-        if (Auth::guard('web')->attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('api_token')->accessToken;
-
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+        $credentials = request(['email', 'password']);
+        if (!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'You Are Successfully Login!',
-                'user' => $user,
-                'access_token' => $token,
-            ], 200);
-        }
-
-        return response()->json(['message' => 'Something went wrong'], 401);
+                'message' => 'Unauthorized'
+            ], 401);
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+        $token->save();
+        return response()->json([
+            'message' => 'Successfully login',
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'user' => $user,
+        ], 200);
     }
 
 
-    public function logout()
+    public function logout(Request $request)
     {
-        dd(Auth::user());
-        Auth::user()->token()->revoke();
-
+        $request->user()->token()->revoke();
         return response()->json([
-            'message' => 'Successfully logged out',
+            'message' => 'Successfully logged out'
         ]);
     }
 }
