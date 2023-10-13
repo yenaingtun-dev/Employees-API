@@ -36,6 +36,9 @@ php artisan migrate --seed
 php artisan passport:install
 ```
 
+```
+php artisan serve
+```
 
 ### **User Registeration, Login and Logout**
 
