@@ -249,3 +249,9 @@ mutation DeleteEmployee {
 ```http
 GET http://127.0.0.1:8000/api/employees/export
 ```
+
+### **Excel Import**
+
+```http
+POST http://127.0.0.1:8000/api/employees/import
+```
