@@ -6,6 +6,7 @@
 
 ## Setup the project
 
+
 ```
 git clone https://github.com/yenaingtun-dev/Employees-API.git
 ```
@@ -118,5 +119,5 @@ mutation DeleteEmployee {
 ### **Excel Export**
 
 ```http
-GET http://127.0.0.1:8000/api/employees/export
+GET http://127.0.0.1:8000/employees/export
 ```

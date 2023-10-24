@@ -23,3 +23,4 @@ Route::group(['middleware' => ['auth:api']], function () {
 });
 
 Route::get('employees/export/', [EmployeeController::class, 'export']);
+Route::post('employees/import/', [EmployeeController::class, 'import']);
