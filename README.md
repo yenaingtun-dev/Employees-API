@@ -255,3 +255,6 @@ GET http://127.0.0.1:8000/api/employees/export
 ```http
 POST http://127.0.0.1:8000/api/employees/import
 ```
+
+
+![Screen Shot 2023-11-19 at 11 27 30 PM](https://github.com/yenaingtun-dev/Employees-API/assets/59411234/511c32f0-82a3-44c7-bea0-9f473698cff0)
